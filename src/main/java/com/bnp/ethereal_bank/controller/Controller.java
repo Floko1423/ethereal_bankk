@@ -2,8 +2,10 @@ package com.bnp.ethereal_bank.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,18 +21,20 @@ public class Controller {
 		this.service = service;
 	}
 
+    @CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/user")
     public List<Client> getUsers() {
         return service.getUsers();
 
     }
-
+    @CrossOrigin(origins= "http://localhost:3000")
     @PostMapping("/addUser")
-    public String addUser(@RequestParam("name") String name) {
+    public void addUser(@RequestBody Registar_Cliente request) {
 
-        service.createUser(name);
+        //service.createUser(name, senha);
+        service.createUser(request.getName(), request.getSenha());
 
-        return "lel";  // nao se usa return em posts (estou na criar info, nao a ir buscar)
+         // nao se usa return em posts (estou a criar info, nao a ir buscar)
 
     }
     
