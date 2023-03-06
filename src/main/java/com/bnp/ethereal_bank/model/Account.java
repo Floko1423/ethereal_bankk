@@ -21,11 +21,11 @@ public class Account {
     //private id= 101; //  necessario com o AtomicInt? // para db
     
 
-    LinkedList<Cliente> titulares; // min 18 anos idade p/ o tit_princ, obrigatório, max 4 tit_sec
+    LinkedList<Client> titulares; // min 18 anos idade p/ o tit_princ, obrigatório, max 4 tit_sec
 
     double saldo_partilhado; // parâmetro necessário? Senão verificar se saldo>50 (minimo para abrir conta) a
                              // partir do metodo para somar o saldo dos cartoes
-    LinkedList<Cartao> cartoes; // usar map visto que hashmap pode guardar valores duplicados
+    LinkedList<Card> cartoes; // usar map visto que hashmap pode guardar valores duplicados
     LinkedList<String> historico;
     
 
@@ -45,20 +45,20 @@ public  AtomicInteger getNum_conta() {
         
         
         Num_conta= new AtomicInteger(last_num_conta.incrementAndGet());
-        cartoes = new LinkedList<Cartao>();
-        titulares = new LinkedList<Cliente>();
+        cartoes = new LinkedList<Card>();
+        titulares = new LinkedList<Client>();
 
         //int nextNumConta = Num_conta.incrementAndGet();
         //this.Num_conta.set(nextNumConta);
     
-        //set this.cliente= tit_principal no momento de criação da conta
+        //set this.Client= tit_principal no momento de criação da conta
         //this.id = Num_conta.getAndIncrement();
     }
 
 
     
 
-    public LinkedList<Cartao> getCartoes() {
+    public LinkedList<Card> getCartoes() {
         return cartoes;
     }
 
@@ -91,7 +91,7 @@ public  AtomicInteger getNum_conta() {
 
 
 
-    public static void addCartao(Cartao cartao) {
+    public static void addCartao(Card cartao) {
         
     }
 

@@ -47,7 +47,7 @@ public class Client {
 	private String profissao;
 
     @Column(name="contas")
-	private HashMap<Account, LinkedList<Cartao>> contas;
+	private HashMap<Account, LinkedList<Card>> contas;
 
 	public UUID getId() {
 		return id;
@@ -132,11 +132,11 @@ public class Client {
 		this.profissao = profissao;
 	}
 
-	public HashMap<Account, LinkedList<Cartao>> getContas() {
+	public HashMap<Account, LinkedList<Card>> getContas() {
 		return contas;
 	}
 
-	public void setContas(HashMap<Account, LinkedList<Cartao>> contas) {
+	public void setContas(HashMap<Account, LinkedList<Card>> contas) {
 		this.contas = contas;
 	}
 

@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.bnp.ethereal_bankkk.business_model.Banco; // alterar
 import com.bnp.ethereal_bankkk.business_model.Cartao;
-import com.bnp.ethereal_bankkk.business_model.Cliente;
+import com.bnp.ethereal_bankkk.business_model.Client;
 /*One common approach is to use a "session-per-request" pattern, 
 where a new Hibernate Session object is created at the beginning of each web request, and then closed at the end of the request.
 This ensures that each web request is isolated within its own Session object, and helps to prevent issues with concurrency and data
@@ -23,7 +23,7 @@ import com.bnp.ethereal_bankkk.business_model.Conta;
 
 final public class Service_Security {
 
-   private final static Set<Sessao> sessoes; //Preciso de guardar com o hibernate ou ele faz isso por mim? se calhar dict para guardar a Sessao-Cliente (desnecessario se a sessao tiver um campo cliente?)
+   private final static Set<Sessao> sessoes; //Preciso de guardar com o hibernate ou ele faz isso por mim? se calhar dict para guardar a Sessao-Client (desnecessario se a sessao tiver um campo Client?)
    final static Service_Security guardiao;
    // private static final receptor(); //recebe pedidos do banco para iniciar
 
@@ -36,9 +36,9 @@ final public class Service_Security {
       sessoes= new HashSet();
    }
 
-   public  void autenticar(Cliente cliente) {
-      Sessao sessao= new Sessao(cliente);
-      cliente.setAutorizado();
+   public void autenticar(Client Client) {
+      Sessao sessao= new Sessao(Client);
+      Client.setAutorizado();
       sessoes.add(sessao);
      }
     
@@ -47,44 +47,44 @@ final public class Service_Security {
 
       
 
-      ArrayList<Cliente> clientes = Banco.getClientes();
+      ArrayList<Client> Clients = Banco.getClients();
       if (!NIF.isPresent() && !num_conta.isPresent() && !pin_cartao.isPresent()) {
           return false; // no authentication parameter provided
       }
   // ADICIONAR SENHA NOS PARAMETROS OPTIONAL(OU NO IF/ELSE STATEMENT NOS DIFERENTES CASOS EX: getNum_conta.equals(.. &&get.senha().equals()...)
       // find the client based on the authentication parameter
-      //Optional<Cliente> cliente = Optional.empty();
-      Optional<Cliente> cliente = Optional.empty();
+      //Optional<Client> Client = Optional.empty();
+      Optional<Client> Client = Optional.empty();
       Optional<Account> conta = Optional.empty();
       Optional<Cartao> cartao = Optional.empty();
-      if (NIF.isPresent() && senha.isPresent()){ // LOGIN: cria sessao e autoriza o cliente (acesso às contas(criar), )
-          cliente = Banco.getClientes()
+      if (NIF.isPresent() && senha.isPresent()){ // LOGIN: cria sessao e autoriza o Client (acesso às contas(criar), )
+          Client = Banco.getClients()
           .stream()
           .filter(c -> c.getNIF().equals(NIF.get()) && c.getSenha().equals(senha)).findFirst();
-          guardiao.autenticar(cliente.get());
+          guardiao.autenticar(Client.get());
           
-          //cliente.get(autorizado);
-      } else if (num_conta.isPresent() && cliente.get().getAutorizado().isPresent() ){ // check se o cliente está autenticado; senão pedir para autenticar
-         // stream das sessoes- ver se tem uma sessao com este cliente
-         //cliente= guardiao.sessoes.stream().filter(s-> s.ge)
-         //cliente.corresponde(this.cliente);
+          //Client.get(autorizado);
+      } else if (num_conta.isPresent() && Client.get().getAutorizado().isPresent() ){ // check se o Client está autenticado; senão pedir para autenticar
+         // stream das sessoes- ver se tem uma sessao com este Client
+         //Client= guardiao.sessoes.stream().filter(s-> s.ge)
+         //Client.corresponde(this.Client);
          
-         //conta = cliente.getContas().stream().filter(co -> conta.getNum_conta().equals(num_conta.get()) )
+         //conta = Client.getContas().stream().filter(co -> conta.getNum_conta().equals(num_conta.get()) )
 
-         /*cliente = Banco.getClientes().stream().filter(c -> (c.getContas().keySet()
+         /*Client = Banco.getClients().stream().filter(c -> (c.getContas().keySet()
           .for(Conta conta: contas){
             return conta.getNum_conta();
           }.equals(num_conta.get()))) */
           //.forEach(  -> { AtomicInteger Num_Conta = this.keySet.get(Conta).getNum_conta();}))
           //.findFirst();
       } else if (pin_cartao.isPresent()) {
-         cliente = Banco.getClientes().stream().filter(c -> c.getContas().values().contains(pin_cartao.get())).findFirst();
+         Client = Banco.getClients().stream().filter(c -> c.getContas().values().contains(pin_cartao.get())).findFirst();
       }
   
-      if (cliente.isPresent()) {
+      if (Client.isPresent()) {
           // authenticate the client using their password
           // for example:
-          // if (cliente.get().getSenha().equals(senha)) {
+          // if (Client.get().getSenha().equals(senha)) {
           //     return true;
           // } else {
           //     return false;
@@ -97,8 +97,8 @@ final public class Service_Security {
   
        //overloading or switch case method para autenticar com NIF/num_conta/id cartao...
       
-      //Banco.clientes.add(cliente);
-      // vai aos clientes ver se o NIF associado inserido está associado à senha
+      //Banco.Clients.add(Client);
+      // vai aos Clients ver se o NIF associado inserido está associado à senha
    }
 
    
@@ -106,24 +106,24 @@ final public class Service_Security {
    private class Sessao {
 
       //private final int id; //?
-      private final Cliente cliente;
-      LinkedList<Object> info_sessao; //guarda NIF cliente, start time/exp time, tempo de sessao, 
+      private final Client Client;
+      LinkedList<Object> info_sessao; //guarda NIF Client, start time/exp time, tempo de sessao, 
 
-      public Sessao(Cliente cliente) {
-         this.cliente=cliente;
+      public Sessao(Client Client) {
+         this.Client=Client;
 
          ;
      }
      
-     public boolean corresponde(Cliente cliente) {
-      if (cliente.equals(this.cliente)) { // equals devolve o .equals do NIF portanto posso escrever assim
+     public boolean corresponde(Client Client) {
+      if (Client.equals(this.Client)) { // equals devolve o .equals do NIF portanto posso escrever assim
          return true;
       }
       else return false;
      }
-     public void autorizar(Optional<Cliente> cliente) {
-      this.cliente.setAutorizado();
-      System.out.println("O cliente foi autorizado com sucesso");
+     public void autorizar(Optional<Client> Client) {
+      this.Client.setAutorizado();
+      System.out.println("O Client foi autorizado com sucesso");
      }
    }
 

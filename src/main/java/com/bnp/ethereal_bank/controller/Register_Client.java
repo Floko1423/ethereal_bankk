@@ -1,11 +1,11 @@
 package com.bnp.ethereal_bank.controller;
 
-public class Registar_Cliente {
+public class Register_Client {
     private String name;
     private String senha;
 
     
-    public Registar_Cliente(String name, String senha) {
+    public Register_Client(String name, String senha) {
         this.name = name;
         this.senha = senha;
     }

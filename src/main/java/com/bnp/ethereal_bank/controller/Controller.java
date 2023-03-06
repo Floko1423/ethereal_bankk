@@ -29,7 +29,7 @@ public class Controller {
     }
     @CrossOrigin(origins= "http://localhost:3000")
     @PostMapping("/addUser")
-    public void addUser(@RequestBody Registar_Cliente request) {
+    public void addUser(@RequestBody Register_Client request) {
 
         //service.createUser(name, senha);
         service.createUser(request.getName(), request.getSenha());
