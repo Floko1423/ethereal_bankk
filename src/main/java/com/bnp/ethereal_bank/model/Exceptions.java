@@ -1,4 +1,4 @@
-package com.bnp.ethereal_bankkk.business_model;
+package com.bnp.ethereal_bank.model;
 
 public class Exceptions extends Exception {
 
@@ -13,8 +13,8 @@ public class Exceptions extends Exception {
 
     }
 
-    public static class CartaoNaoEncontradoException extends Exceptions {
-        public CartaoNaoEncontradoException(String message) {
+    public static class CardNaoEncontradoException extends Exceptions {
+        public CardNaoEncontradoException(String message) {
 
             super(message);
         }

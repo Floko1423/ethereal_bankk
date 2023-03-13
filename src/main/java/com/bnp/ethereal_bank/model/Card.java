@@ -1,27 +1,38 @@
-package com.bnp.ethereal_bankkk.business_model;
+package com.bnp.ethereal_bank.model;
 
 import java.util.LinkedList;
 import java.util.Random;
 
-import com.bnp.ethereal_bankkk.business_model.Exceptions.DepositoFalhadoException;
+import com.bnp.ethereal_bank.model.Exceptions.DepositoFalhadoException;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name="cards")
 public abstract class Card {
 
-    // Cliente cliente; // parametro desnecessario visto que clientes na mesma conta
-    // podem ter acesso aos mesmos cartoes se souberem o pin
-    // Conta conta;
-    @EmbeddedId
-    @GeneratedValue
-    private Long id_conta;
-    String id;
-    String pin;
-    int val_dia;
-    double saldo;
+    // Client Client; // parametro desnecessario? visto que Clients na mesma Account
+    // podem ter acesso aos mesmos cards se souberem o pin
+    // Account Account;
+    //private Long id_Account;
+
+    @Column(name="id")
+    @Id
+    private String id;
+
+    @Column(name="pin")
+    private String pin;
+
+    @Column(name="daily_value")
+    private int val_dia;
+
+    @Column(name="balance")
+    private double saldo;
 
     public Card(int val_dia, double saldo) {
         this.id = auto_id();
@@ -41,7 +52,7 @@ public abstract class Card {
         return "Cartão com id: " + this.id + ", possui o pin " + this.pin + ", tem de saldo:" + this.saldo;
     }
 
-    public String auto_pin() { // fazer com que este método invoque outro que permita ao cliente mudar na 1ª
+    public String auto_pin() { // fazer com que este método invoque outro que permita ao Client mudar na 1ª
                                // utilizacao
 
         Random rnd = new Random();
@@ -62,31 +73,16 @@ public abstract class Card {
         this.pin = pin;
     }
 
-    public void transacao1(Object... args) {
+   
 
-        LinkedList<Object> params = new LinkedList<>(); // aqui pomos 1º o tipo de objecto que vai fazer a transação
-                                                        // (conta/cartao) e depois o valor
-        // dependente do tipo de objecto vamos buscar o int (num_conta / id) - mostrar
-        // contas do cliente/cartoes
-        for (Object arg : args) {
-            switch (arg.getClass().getSimpleName()) {
-                case "Conta":
-
-                case "Cartao":
-
-            }
-
-        }
-    }
-
-    public void transacao(double valor) throws Exception { // fazer method overload em conta para conseguir transferir
-                                                           // para outras contas
+    public void transacao(double valor) throws Exception { // fazer method overload em Account para conseguir transferir
+                                                           // para outras Accounts
 
         if (valor > 200) {
             throw new Exception("Erro: transacao excede o limite de 200 euros.");
         } else if (valor > saldo) {
-            throw new Exception("Erro: transacao não pode exceder o saldo da conta"); // este saldo tem de ser o saldo
-                                                                                      // total da conta
+            throw new Exception("Erro: transacao não pode exceder o saldo da Account"); // este saldo tem de ser o saldo
+                                                                                      // total da Account
         } else {
             saldo = saldo + valor; // fazer com que transacao seja possivel para outros
         }
@@ -96,7 +92,7 @@ public abstract class Card {
         if (valor > 400) {
             throw new Exception("Erro: O levantamento excede o limite de 400 euros diários."); // pôr o limite /dia
                                                                                                // através do historico
-                                                                                               // associado à conta
+                                                                                               // associado à Account
         } else {
             this.saldo = this.saldo - valor;
         }

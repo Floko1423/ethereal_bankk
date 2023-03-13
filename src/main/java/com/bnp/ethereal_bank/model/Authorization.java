@@ -1,4 +1,4 @@
-package com.bnp.ethereal_bankkk.business_model;
+package com.bnp.ethereal_bank.model;
 
 public class Authorization {
 

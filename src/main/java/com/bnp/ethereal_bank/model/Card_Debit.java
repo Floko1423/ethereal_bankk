@@ -1,10 +1,13 @@
-package com.bnp.ethereal_bankkk.business_model;
+package com.bnp.ethereal_bank.model;
+import jakarta.persistence.Entity;
 
-public class Card_Debit extends Cartao {
+//@Entity
+public class Card_Debit extends Card {
 
     public Card_Debit( int val_dia, double saldo) {
         super(val_dia, saldo);
-        //TODO Auto-generated constructor stub
     }
+
+
     
 }

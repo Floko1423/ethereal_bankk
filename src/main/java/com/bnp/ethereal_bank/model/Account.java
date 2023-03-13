@@ -1,65 +1,160 @@
 package com.bnp.ethereal_bank.model;
 
+import com.bnp.ethereal_bank.model.Card;
 import java.util.LinkedList;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name="accounts")
 public class Account {
-    private static AtomicInteger last_num_conta = new AtomicInteger(0);
-    AtomicInteger Num_conta;
+    private static AtomicInteger last_num_Account = new AtomicInteger(0);
+    AtomicInteger num_Account;
     
-    @EmbeddedId
-    @GeneratedValue
-    private Long id_conta;
-    //private static AtomicInteger Num_conta = new AtomicInteger(100); // Using an AtomicInteger for the account number can be a good approach in a multi-threaded environment where you need to ensure that each account number is unique and that multiple threads do not generate the same account number.
+    @Column(name="id")
+    @Id
+    private UUID id;
+    //private static AtomicInteger Num_Account = new AtomicInteger(100); // Using an AtomicInteger for the account number can be a good approach in a multi-threaded environment where you need to ensure that each account number is unique and that multiple threads do not generate the same account number.
     //private id= 101; //  necessario com o AtomicInt? // para db
-    
+    private static AtomicInteger last_account_num = new AtomicInteger(0);
 
-    LinkedList<Client> titulares; // min 18 anos idade p/ o tit_princ, obrigatório, max 4 tit_sec
+    @Column(name="account_num")
+    AtomicInteger account_num;
 
-    double saldo_partilhado; // parâmetro necessário? Senão verificar se saldo>50 (minimo para abrir conta) a
-                             // partir do metodo para somar o saldo dos cartoes
-    LinkedList<Card> cartoes; // usar map visto que hashmap pode guardar valores duplicados
+    @Column(name="titulares")
+    LinkedList<Client> holders; // titulares// min 18 anos idade p/ o tit_princ, obrigatório, max 4 tit_sec
+
+    @Column(name="shared_balance")
+    double shared_balance; // parâmetro necessário? Senão verificar se saldo>50 (minimo para abrir Account) a partir do metodo para somar o saldo dos cards
+    LinkedList<Card> cards; 
+
+    @Column(name="transaction_history")
     LinkedList<String> historico;
     
+    
 
-    //private Tipo tipo;
+    private Tipo tipo;
 
-   /*  public enum Tipo {
+   public static AtomicInteger getLast_num_Account() {
+        return last_num_Account;
+    }
+
+
+    public static void setLast_num_Account(AtomicInteger last_num_Account) {
+        Account.last_num_Account = last_num_Account;
+    }
+
+
+    public void setNum_Account(AtomicInteger num_Account) {
+        this.num_Account = num_Account;
+    }
+
+
+    public UUID getId() {
+        return id;
+    }
+
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+
+    public static AtomicInteger getLast_account_num() {
+        return last_account_num;
+    }
+
+
+    public static void setLast_account_num(AtomicInteger last_account_num) {
+        Account.last_account_num = last_account_num;
+    }
+
+
+    public AtomicInteger getAccount_num() {
+        return account_num;
+    }
+
+
+    public void setAccount_num(AtomicInteger account_num) {
+        this.account_num = account_num;
+    }
+
+
+    public LinkedList<Client> getHolders() {
+        return holders;
+    }
+
+
+    public void setHolders(LinkedList<Client> holders) {
+        this.holders = holders;
+    }
+
+
+    public double getShared_balance() {
+        return shared_balance;
+    }
+
+
+    public void setShared_balance(double shared_balance) {
+        this.shared_balance = shared_balance;
+    }
+
+
+    public LinkedList<Card> getCards() {
+        return cards;
+    }
+
+
+    public void setCards(LinkedList<Card> cards) {
+        this.cards = cards;
+    }
+
+
+    public LinkedList<String> getHistorico() {
+        return historico;
+    }
+
+
+    public void setHistorico(LinkedList<String> historico) {
+        this.historico = historico;
+    }
+
+
+  public enum Tipo {
       corrente,
       poupanca
     }
-*/
-public  AtomicInteger getNum_conta() {
-    return Num_conta;
+
+public  AtomicInteger getNum_Account() {
+    return num_Account;
 }
 
 
     public Account() {
         
         
-        Num_conta= new AtomicInteger(last_num_conta.incrementAndGet());
-        cartoes = new LinkedList<Card>();
-        titulares = new LinkedList<Client>();
+        num_Account= new AtomicInteger(last_num_Account.incrementAndGet());
+        cards = new LinkedList<Card>();
+        holders = new LinkedList<Client>();
 
-        //int nextNumConta = Num_conta.incrementAndGet();
-        //this.Num_conta.set(nextNumConta);
+        //int nextNumAccount = Num_Account.incrementAndGet();
+        //this.Num_Account.set(nextNumAccount);
     
-        //set this.Client= tit_principal no momento de criação da conta
-        //this.id = Num_conta.getAndIncrement();
+        //set this.Client= tit_principal no momento de criação da Account
+        //this.id = Num_Account.getAndIncrement();
     }
 
 
-    
-
-    public LinkedList<Card> getCartoes() {
-        return cartoes;
+    public LinkedList<Card> getcards() {
+        return cards;
     }
 
 
@@ -73,30 +168,16 @@ public  AtomicInteger getNum_conta() {
         if (getClass() != obj.getClass())
             return false;
         final Account other = (Account) obj;
-        return this.Num_conta == other.Num_conta;   
+        return this.num_Account == other.num_Account;   
     }
 
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 43 * hash + this.Num_conta.intValue(); // nao posso mudar o hash para AtomicInteger senao afeta outros metodos como o equals()
+        hash = 43 * hash + this.num_Account.intValue(); // nao posso mudar o hash para AtomicInteger senao afeta outros metodos como o equals()
         return hash;
     }
-
-
-
-
-    
-
-
-
-    public static void addCartao(Card cartao) {
-        
-    }
-
-
-    
 
 
    
